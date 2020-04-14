@@ -1,0 +1,4 @@
+export const _code = {
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+  ALREADY_USERNAME: 'ALREADY_USERNAME',
+};

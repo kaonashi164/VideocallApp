@@ -1,21 +1,34 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { ImageBackground } from 'react-native';
+import { useAsyncStorage } from '@react-native-community/async-storage';
+import { requestMultiple, PERMISSIONS } from 'react-native-permissions'
 
-import {style} from './styles';
-import {storage} from '@constants';
-import {useAsyncStorage} from '@react-native-community/async-storage';
-import {useFocusEffect, useTheme} from '@react-navigation/native';
+import Image from '@images/technical.jpg';
+import { storage } from '@constants';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { Q_MY_INFO } from '@graphql';
+import { SplashScreenNavigationProp } from '@types';
+import { AuthCTX } from '@context';
 
-export const SplashScreen = (props: any) => {
-  const {getItem} = useAsyncStorage(storage.TOKEN);
-  const {dark} = useTheme();
+type Props = {
+  navigation: SplashScreenNavigationProp
+}
 
-  useFocusEffect(() => {
+export const SplashScreen = (props: Props) => {
+  const { getItem } = useAsyncStorage(storage.TOKEN);
+  const { dispatch } = useContext(AuthCTX)
+  const [queryMyInfo, { data }] = useLazyQuery(Q_MY_INFO)
+
+  useEffect(() => {
     const bootstrapAsync = async () => {
       try {
+        if (data && data.myInfo) {
+          dispatch!({ type: 'SET_USER', value: { user: data.myInfo } })
+          return props.navigation.navigate('App')
+        }
         getItem((_, result) => {
           if (result) {
-            return props.navigation.navigate('App');
+            return queryMyInfo()
           }
           return props.navigation.navigate('Auth');
         });
@@ -24,12 +37,15 @@ export const SplashScreen = (props: any) => {
       }
     };
 
-    setTimeout(() => bootstrapAsync(), 2000);
-  });
+    // requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
+    //   statuses => {
+    //     console.log('CAMERA', statuses[PERMISSIONS.IOS.CAMERA])
+    //     console.log('MICROPHONE', statuses[PERMISSIONS.IOS.MICROPHONE])
+    //   }
+    // )
 
-  return (
-    <View style={style.container}>
-      <Text style={{color: dark ? '#fff' : '#000'}}>Splash</Text>
-    </View>
-  );
+    bootstrapAsync()
+  }, [data]);
+
+  return <ImageBackground source={Image} style={{ flex: 1 }} />;
 };

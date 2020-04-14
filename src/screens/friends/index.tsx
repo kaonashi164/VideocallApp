@@ -2,10 +2,15 @@ import React, {useContext} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
 import {Button} from 'native-base';
 import {useAsyncStorage} from '@react-native-community/async-storage';
-import {storage, AUTH_CONTEXT} from '@constants';
+import {storage} from '@constants';
 import {AuthCTX} from '@context';
+import {FriendScreenNavigationProp} from '@types';
 
-export const FriendScreen = (props: any) => {
+type Props = {
+  navigation: FriendScreenNavigationProp;
+};
+
+export const FriendScreen = (props: Props) => {
   const {removeItem} = useAsyncStorage(storage.TOKEN);
   const authCtx = useContext(AuthCTX);
   console.log('render');
@@ -17,7 +22,7 @@ export const FriendScreen = (props: any) => {
         <Button
           onPress={() => {
             authCtx.dispatch!({
-              type: AUTH_CONTEXT.ACTION.SET_USER,
+              type: 'SET_USER',
               value: {user: '123'},
             });
           }}>
@@ -27,7 +32,7 @@ export const FriendScreen = (props: any) => {
           onPress={() => {
             removeItem(e => {
               console.log(e);
-              props.navigation.navigate('Auth', {screen: 'Login'});
+              props.navigation.navigate('Auth');
             });
           }}>
           <Text>Logout</Text>

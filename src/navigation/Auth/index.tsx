@@ -1,33 +1,29 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Button, Text} from 'native-base';
-import {useColorScheme, Appearance} from 'react-native-appearance';
 
 import {LoginScreen} from '@screens/login';
+import {AuthStackParamList} from '@types';
+import {DefaultScreen} from '@screens/default';
+import {RegisterScreen} from '@screens/register';
+import {RegisterNameScreen} from '@screens/registername';
 
-const AuthStack = createStackNavigator();
+const AuthStack = createStackNavigator<AuthStackParamList>();
 
 export const AuthStackContainer = () => {
-  const theme = useColorScheme();
   return (
-    <AuthStack.Navigator screenOptions={{gestureEnabled: false}}>
+    <AuthStack.Navigator
+      headerMode="none"
+      screenOptions={{gestureEnabled: false}}>
+      <AuthStack.Screen name="Default" component={DefaultScreen} />
       <AuthStack.Screen
         options={{
-          headerRight: () => (
-            <Button
-              onPress={() =>
-                Appearance.set({
-                  colorScheme: theme === 'dark' ? 'light' : 'dark',
-                })
-              }>
-              <Text>Theme</Text>
-            </Button>
-          ),
           gestureEnabled: false,
         }}
         name="Login"
         component={LoginScreen}
       />
+      <AuthStack.Screen name="Register" component={RegisterScreen} />
+      <AuthStack.Screen name="RegisterName" component={RegisterNameScreen} />
     </AuthStack.Navigator>
   );
 };

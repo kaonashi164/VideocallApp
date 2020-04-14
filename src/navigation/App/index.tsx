@@ -3,10 +3,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeScreen} from '@screens/home';
 import {FriendScreen} from '@screens/friends';
+import {TabStackParamList, AppStackParamList} from '@types';
 
-const AppStack = createStackNavigator();
+const AppStack = createStackNavigator<AppStackParamList>();
 
-const TabStack = createBottomTabNavigator();
+const TabStack = createBottomTabNavigator<TabStackParamList>();
 
 export const AppStackContainer = () => {
   return (

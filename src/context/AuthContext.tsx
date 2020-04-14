@@ -1,16 +1,15 @@
-import React, {useReducer} from 'react';
-import {AuthContextType, DispatchType} from 'src/types';
-import {AUTH_CONTEXT} from '@constants';
+import React, { useReducer } from 'react';
+import { AuthContextType, AuthDispatch } from 'src/types';
 
 const AuthCTX = React.createContext<AuthContextType>({});
 
-export {AuthCTX};
+export { AuthCTX };
 
 export const AuthContext = (props: any) => {
   const [state, dispatch] = useReducer(
-    (prevState: any, action: DispatchType) => {
+    (prevState: any, action: AuthDispatch) => {
       switch (action.type) {
-        case AUTH_CONTEXT.ACTION.SET_USER: {
+        case 'SET_USER': {
           return {
             ...prevState,
             user: action.value?.user,
@@ -22,12 +21,12 @@ export const AuthContext = (props: any) => {
       }
     },
     {
-      user: 'ABC',
+      user: undefined,
     },
   );
 
   return (
-    <AuthCTX.Provider value={{state, dispatch}}>
+    <AuthCTX.Provider value={{ state, dispatch }}>
       {props.children}
     </AuthCTX.Provider>
   );

@@ -1,13 +1,16 @@
 import React from 'react';
-import {AuthContext} from './context';
+import {ApolloProvider} from '@apollo/react-hooks';
 import {AppContainer} from '@navigation';
-import {GlobalContext} from './context/GlobalContext';
+import {AuthContext, GlobalContext} from '@context';
+import {client} from '@graphql';
 
 export const AppProvider = () => {
   return (
     <AuthContext>
       <GlobalContext>
-        <AppContainer />
+        <ApolloProvider client={client}>
+          <AppContainer />
+        </ApolloProvider>
       </GlobalContext>
     </AuthContext>
   );

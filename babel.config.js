@@ -31,6 +31,7 @@ module.exports = {
           '@src': './src/App',
           '@context': './src/context',
           '@types': './src/types',
+          '@base': './src/base',
         },
       },
     ],

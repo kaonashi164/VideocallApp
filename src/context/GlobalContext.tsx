@@ -1,6 +1,5 @@
 import React, {useReducer} from 'react';
-import {DispatchType, GlobalContextType} from '@types';
-import {GLOBAL_CONTEXT} from '@constants';
+import {GlobalDispatch, GlobalContextType} from '@types';
 import {Appearance, useColorScheme} from 'react-native-appearance';
 
 const GlobalCTX = React.createContext<GlobalContextType>({});
@@ -10,9 +9,9 @@ export {GlobalCTX};
 export const GlobalContext = (props: any) => {
   const theme = useColorScheme();
   const [state, dispatch] = useReducer(
-    (prevState: any, action: DispatchType) => {
+    (prevState: any, action: GlobalDispatch) => {
       switch (action.type) {
-        case GLOBAL_CONTEXT.ACTION.SET_THEME: {
+        case 'SET_THEME': {
           Appearance.set({colorScheme: theme === 'dark' ? 'light' : 'dark'});
           return {
             ...prevState,
