@@ -18,14 +18,8 @@ export const FriendScreen = (props: Props) => {
     <SafeAreaView>
       <View>
         <Text>Friend</Text>
-        <Text>{authCtx.state!.user}</Text>
-        <Button
-          onPress={() => {
-            authCtx.dispatch!({
-              type: 'SET_USER',
-              value: {user: '123'},
-            });
-          }}>
+        <Text>{authCtx.state!.user.email}</Text>
+        <Button>
           <Text>Change Name</Text>
         </Button>
         <Button

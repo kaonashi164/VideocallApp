@@ -1,1 +1,1 @@
-export * from './lib-jitsi-meet';
+export * from './janus';
