@@ -28,17 +28,16 @@ export const VideoJanus = (props: Props) => {
   const {globalState} = useContext(GlobalCTX);
 
   const isShowMyCam = () =>
-    props.isVideoCall &&
+    (props.isVideoCall ||
+      (globalState!.currentCall && globalState!.currentCall.isVideoCall)) &&
     props.myURL !== '' &&
-    globalState!.currentCall &&
-    globalState!.currentCall.isVideoCall &&
     props.isCamera;
   const isShowRemoteCam = () =>
-    props.isVideoCall &&
+    (props.isVideoCall ||
+      (globalState!.currentCall && globalState!.currentCall.isVideoCall)) &&
     props.remoteURL !== '' &&
-    props.calling &&
-    globalState!.currentCall &&
-    globalState!.currentCall.isVideoCall;
+    props.calling;
+
   return (
     <View style={styles.container}>
       {props.calling && (
