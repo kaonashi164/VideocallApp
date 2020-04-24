@@ -1,18 +1,27 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, Button} from 'native-base';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
 import {DEVICE} from '@constants';
+import {isAndroid} from '@utils';
+import {GlobalCTX} from '@context';
 
 export const UpcomingCall = (props: any) => {
+  const {globalState} = useContext(GlobalCTX);
   return (
     <View style={styles.container}>
+      {isAndroid && (
+        <StatusBar backgroundColor="#5d9c5a" barStyle="light-content" />
+      )}
       <Text style={styles.title}>Đang gọi video đến</Text>
 
       <View style={styles.groupBtn}>
-        <Button onPress={() => props.accept()}>
+        <Button
+          onPress={() => {
+            props.accept(globalState!.callId);
+          }}>
           <Text>Trả lời</Text>
         </Button>
-        <Button>
+        <Button onPress={() => props.hangup()}>
           <Text>Từ chối</Text>
         </Button>
       </View>
@@ -22,8 +31,8 @@ export const UpcomingCall = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    position: 'absolute',
+    // flex: 1,
+    position: isAndroid ? 'relative' : 'absolute',
     zIndex: 99,
     backgroundColor: '#5d9c5a',
     width: DEVICE.WIDTH_SCREEN,

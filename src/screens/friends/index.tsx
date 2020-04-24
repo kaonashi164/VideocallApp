@@ -1,37 +1,47 @@
-import React, {useContext} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {Button} from 'native-base';
-import {useAsyncStorage} from '@react-native-community/async-storage';
-import {storage} from '@constants';
-import {AuthCTX} from '@context';
-import {FriendScreenNavigationProp} from '@types';
+import React, { useContext } from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { View, Text, SafeAreaView } from 'react-native';
+import { Q_USERS, M_MAKE_CALL } from '@graphql';
+import { ItemFriend } from './ItemFriend';
+import { GlobalCTX } from '@context';
+import { returnConfirm } from '@utils';
 
-type Props = {
-  navigation: FriendScreenNavigationProp;
-};
+export const FriendScreen = () => {
+  const { data, loading } = useQuery(Q_USERS);
+  const { globalState, globalDispatch } = useContext(GlobalCTX)
+  const [makeCall] = useMutation(M_MAKE_CALL)
 
-export const FriendScreen = (props: Props) => {
-  const {removeItem} = useAsyncStorage(storage.TOKEN);
-  const authCtx = useContext(AuthCTX);
-  console.log('render');
+  const _makeCall = (username, receiver, isVideoCall, isVoiceCall) => {
+    makeCall({
+      variables: {
+        callInput: {
+          receiver,
+          isVideoCall,
+          isVoiceCall
+        }
+      }
+    }).then(({ data }) => {
+      globalDispatch!({ type: 'SET_STATE', callId: data.makeCall })
+      globalState!.doCall!(username, true, isVideoCall, data.makeCall)
+    }).catch(err => {
+      console.log(err)
+      if (err.message === 'GraphQL error: USER_NOT_ONLINE') {
+        return returnConfirm('Người dùng không online')
+      }
+    })
+  }
+
   return (
     <SafeAreaView>
-      <View>
-        <Text>Friend</Text>
-        <Text>{authCtx.state!.user.email}</Text>
-        <Button>
-          <Text>Change Name</Text>
-        </Button>
-        <Button
-          onPress={() => {
-            removeItem(e => {
-              console.log(e);
-              props.navigation.navigate('Auth');
-            });
-          }}>
-          <Text>Logout</Text>
-        </Button>
-      </View>
+      {loading || !data.users ? (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      ) : (
+          data.users
+            .filter(user => user.username)
+            .map(user => <ItemFriend makeCall={_makeCall} key={user._id} user={user} />)
+        )}
     </SafeAreaView>
   );
 };

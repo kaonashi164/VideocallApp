@@ -40,10 +40,10 @@ const wsLink = new WebSocketLink({
   uri: 'ws://devcloud3.digihcs.com:13278/graphql',
   options: {
     reconnect: true,
-    timeout: 300000,
+    timeout: 30000,
     connectionParams: async () => {
       const token = await AsyncStorage.getItem(storage.TOKEN);
-      return {
+      return await {
         'access-token': token ? token : null,
       };
     },

@@ -7,7 +7,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ImageBackground,
-  Alert,
 } from 'react-native';
 import { Button, Item, Input } from 'native-base';
 

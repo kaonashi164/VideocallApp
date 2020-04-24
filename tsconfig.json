@@ -80,7 +80,8 @@
       "@src": ["src/App"],
       "@context": ["src/context"],
       "@types": ["src/types"],
-      "@base": ["src/base"]
+      "@base": ["src/base"],
+      "@icons": ["src/assets/icons"]
     }
   }
 }
