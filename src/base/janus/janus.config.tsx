@@ -76,7 +76,6 @@ export class Janus {
       return;
     }
     Janus.log('Library initialized: ' + Janus.initDone);
-    gatewayCallbacks = gatewayCallbacks || {};
     gatewayCallbacks.success =
       typeof gatewayCallbacks.success == 'function'
         ? gatewayCallbacks.success
